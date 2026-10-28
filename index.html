@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tripario</title>
+    <meta name="description" content="Tripario is a private travel planner. Your trips stay on your device." />
+    <meta name="theme-color" content="#1f5f8b" />
+    <link rel="icon" href="/tripario-web/icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/tripario-web/icons/icon-192.png" />
+    <style>.unsupported{max-width:32rem;margin:2rem auto;padding:0 1rem;font-family:system-ui,sans-serif;line-height:1.5}</style>
+    <!-- Tiny pre-check (D-023): ES5 only, runs before the bundle. Browsers
+         below the build target see a static message instead of a broken app. -->
+    <script>
+      (function () {
+        var ok = false;
+        try {
+          ok = 'noModule' in HTMLScriptElement.prototype &&
+            !!window.indexedDB &&
+            !!window.Intl && typeof Intl.DateTimeFormat.prototype.formatToParts === 'function' &&
+            typeof Array.prototype.at === 'function' &&
+            typeof Object.hasOwn === 'function' &&
+            typeof window.structuredClone === 'function';
+        } catch (e) {
+          ok = false;
+        }
+        if (!ok) document.documentElement.setAttribute('data-unsupported', '');
+      })();
+    </script>
+    <style>html:not([data-unsupported]) #unsupported,html[data-unsupported] #app{display:none}</style>
+    <link rel="manifest" href="/tripario-web/manifest.webmanifest">
+    <script type="module" crossorigin src="/tripario-web/assets/index-DkmdmxKZ.js"></script>
+    <link rel="stylesheet" crossorigin href="/tripario-web/assets/index-C47wCzLU.css">
+  </head>
+  <body>
+    <div id="unsupported" class="unsupported" role="alert">
+      <h1>This browser is not supported</h1>
+      <p>Tripario needs a recent version of Chrome, Edge or Firefox. Please update your browser or open this page in another one.</p>
+    </div>
+    <noscript>
+      <div class="unsupported"><p>Tripario needs JavaScript to run.</p></div>
+    </noscript>
+    <div id="app"></div>
+  </body>
+</html>
