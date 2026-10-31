@@ -3,8 +3,8 @@
  * Cache-first app shell with a versioned cache; a new version waits until
  * the page asks it to take over (the "new version" prompt).
  */
-const VERSION = "38cf315bc1d2";
-const PRECACHE = ["./","assets/index-CtslxLR-.js","assets/index-RirwyCV-.css","assets/sample-qRuf1LrN.js","brand/tripario-logo-full-white.webp","brand/tripario-symbol-white.png","icons/icon-192.png","icons/icon-512.png","icons/icon.svg","manifest.webmanifest"];
+const VERSION = "2393aac6b601";
+const PRECACHE = ["./","assets/index-CPzc_MYZ.css","assets/index-D1CpqS1C.js","assets/sample-CBSCk6wx.js","brand/tripario-logo-full-white.webp","brand/tripario-symbol-white.png","icons/icon-192.png","icons/icon-512.png","icons/icon.svg","manifest.webmanifest"];
 
 const SCOPE = self.registration.scope;
 // Cache names carry the scope, so other sites on the same origin
