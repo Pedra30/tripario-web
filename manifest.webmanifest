@@ -9,6 +9,26 @@
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1f5f8b",
+  "share_target": {
+    "action": "/tripario-web/share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "file",
+          "accept": [
+            "application/json",
+            "application/zip",
+            "application/octet-stream",
+            ".json",
+            ".tripario.json",
+            ".zip"
+          ]
+        }
+      ]
+    }
+  },
   "icons": [
     {
       "src": "icons/icon-192.png",

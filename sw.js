@@ -3,8 +3,8 @@
  * Cache-first app shell with a versioned cache; a new version waits until
  * the page asks it to take over (the "new version" prompt).
  */
-const VERSION = "a50c91afe7a0";
-const PRECACHE = ["./","assets/index-BKw4jmfY.js","assets/index-BZ5MsLDc.css","assets/sample-5oGzBw-R.js","brand/tripario-logo-full-white.webp","brand/tripario-symbol-white.png","icons/icon-192.png","icons/icon-512.png","icons/icon.svg","manifest.webmanifest"];
+const VERSION = "100bacddd0bb";
+const PRECACHE = ["./","assets/index-CD7Zli0h.css","assets/index-ClcZCfG9.js","assets/report-m24d-lO_.js","assets/sample-7mb7LaYD.js","brand/tripario-logo-full-white.webp","brand/tripario-symbol-white.png","icons/icon-192.png","icons/icon-512.png","icons/icon.svg","manifest.webmanifest"];
 
 const SCOPE = self.registration.scope;
 // Cache names carry the scope, so other sites on the same origin
@@ -15,6 +15,32 @@ const INDEX = new URL('./', SCOPE).href;
 // Precached files are versioned with the cache, so Vary headers (servers
 // send Vary: Origin or Accept-Encoding) must not block a cache hit offline.
 const MATCH = { ignoreVary: true };
+
+// Web Share Target (D-057): a file shared to the installed app arrives as a POST to this address.
+// The file waits in its own cache (never the shell cache, so the update logic is untouched) until
+// the import screen takes it and deletes it. The cache name does not start with PREFIX, so
+// activation never deletes it, and the page uses the same name and key (src/ui/sharedFile.ts).
+const SHARE_URL = new URL('share-target', SCOPE).href;
+const SHARE_CACHE = `share:${SCOPE}`;
+const SHARE_KEY = new URL('shared-file', SCOPE).href;
+const SHARE_MAX = 25 * 1000 * 1000;
+
+async function receiveShare(request) {
+  try {
+    const form = await request.formData();
+    const file = form.getAll('file').find((entry) => typeof entry !== 'string' && entry.size <= SHARE_MAX);
+    if (file) {
+      const cache = await caches.open(SHARE_CACHE);
+      await cache.put(
+        SHARE_KEY,
+        new Response(file, { headers: { 'Content-Type': 'application/octet-stream', 'X-File-Name': encodeURIComponent(file.name || 'shared-file') } }),
+      );
+    }
+  } catch {
+    // Nothing usable arrived: the import screen opens anyway, with its normal file picker.
+  }
+  return Response.redirect(INDEX + '#/import', 303);
+}
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -45,6 +71,10 @@ self.addEventListener('message', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const request = event.request;
+  if (request.method === 'POST' && request.url === SHARE_URL) {
+    event.respondWith(receiveShare(request));
+    return;
+  }
   // Only this app's own files are handled. Anything outside the scope, such as the
   // exchange-rate request to api.frankfurter.dev (D-052), is never intercepted or cached.
   if (request.method !== 'GET' || !request.url.startsWith(SCOPE)) return;
